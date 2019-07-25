@@ -1,37 +1,65 @@
-import React, { Component } from 'react';
-import FilterTag from './FilterTag'
+import React, { Component } from "react";
+import FilterTag from "./FilterTag";
+import { Tag } from "antd";
+import "antd/";
+import "antd/dist/antd.css";
 
-class FilterGroup extends Component {
-    static defaultProps = {
-        title: "Filter"
-    }
+class Group {
+  constructor(id, title, tags) {
+    this.id = id;
+    this.title = title;
+    this.tags = tags;
+  }
 
-    handleToggle = (id) => {
-        this.props.toggle(id)
-    }
-
-    render() {
-        const titleStyle = {
-            fontSize: "18px",
-            fontColor: "blue",
-            marginRight: "20px"
-        }
-        return (
-            <div style={{
-                display: "inline-block",
-                float: "left",
-                marginLeft: "10px",
-                height: "35px"
-            }}>
-                <span style={titleStyle}>{this.props.title}:</span>
-                {
-                    this.props.tags.map(ele => 
-                        <FilterTag key={ele.id} value={ele} toggle={this.handleToggle} />
-                    )
-                }
-            </div>
-        );
-    }
+  checkAll() {
+    this.tags.forEach(tag => tag.check());
+  }
 }
 
-export default FilterGroup
+class FilterGroup extends Component {
+  static defaultProps = {
+    title: "Filter"
+  };
+
+  handleToggle = text => {
+    this.props.toggle(this.props.data.id, text);
+  };
+
+  selectAll = () => this.props.selectAll(this.props.data.id);
+
+  render() {
+    let { title, tags } = this.props.data;
+    const titleStyle = {
+      fontSize: "18px",
+      fontColor: "blue",
+      marginRight: "20px"
+    };
+    return (
+      <div
+        style={{
+          display: "inline-block",
+          float: "left",
+          marginLeft: "10px",
+          height: "35px"
+        }}
+      >
+        <span style={titleStyle}>{title}:</span>
+        {tags.map(ele => (
+          <FilterTag
+            key={ele.text}
+            text={ele.text}
+            checked={ele.checked}
+            toggle={this.handleToggle}
+          />
+        ))}
+
+        <Tag color="orange" onClick={this.selectAll}>
+          选择全部
+        </Tag>
+      </div>
+    );
+  }
+}
+
+export default FilterGroup;
+export { Group };

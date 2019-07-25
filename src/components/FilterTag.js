@@ -1,33 +1,48 @@
-import React, { Component } from 'react';
-import { Tag } from 'antd';
+import React, { Component } from "react";
+import { Tag } from "antd";
+import "antd/dist/antd.css";
 
 export class FilterTagObj {
-    constructor(id, text, checked) {
-        this.id = id
-        this.text = text
-        this.checked = arguments.length > 2 ? checked : false
-    }
+  constructor(text, checked) {
+    this.text = text;
+    this.checked = arguments.length > 1 ? checked : true;
+  }
 
-    toggle() {
-        this.checked = !this.checked
-    }
+  isChecked() {
+    return this.checked;
+  }
+
+  check() {
+    this.checked = true;
+  }
+
+  uncheck() {
+    this.checked = false;
+  }
+
+  toggle() {
+    this.checked = !this.checked;
+  }
 }
 
 export default class FilterTag extends Component {
+  handleToggle = checked => this.props.toggle(this.props.text);
 
-    handleChange = (checked) => {
-        this.props.toggle(this.props.value.id);
-    }
+  tagStyle = {
+    border: "1px solid blue",
+    borderRadius: "10px"
+  };
 
-    tagStyle = {
-        border: "1px solid blue",
-        borderRadius: "10px"
-    }
-
-    render() {
-        const { value } = this.props;
-        return <Tag.CheckableTag checked={value.checked} onChange={this.handleChange} style={this.tagStyle}>
-            {value.text}
-            </Tag.CheckableTag> 
-    }
+  render() {
+    const { text, checked } = this.props;
+    return (
+      <Tag.CheckableTag
+        checked={checked}
+        onChange={this.handleToggle}
+        style={this.tagStyle}
+      >
+        {text}
+      </Tag.CheckableTag>
+    );
+  }
 }
